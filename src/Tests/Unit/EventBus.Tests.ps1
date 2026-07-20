@@ -1,4 +1,4 @@
-using module "..\..\..\src\Core\EventBus.psm1"
+using module "..\..\Core\EventBus.psm1"
 
 Describe "EventBus Pub/Sub System" {
     BeforeEach {

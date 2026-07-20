@@ -1,11 +1,10 @@
-using module "..\..\..\src\Core\EventBus.psm1"
-using module "..\..\..\src\Core\CommandBus.psm1"
-using module "..\..\..\src\Logger\Logger.psm1"
-using module "..\..\..\src\Domain\Analysis\AnalysisDomain.psm1"
+using module "..\..\Core\EventBus.psm1"
+using module "..\..\Core\CommandBus.psm1"
+using module "..\..\Logger\Logger.psm1"
+using module "..\..\Domain\Analysis\AnalysisDomain.psm1"
 
 Describe "System Optimization Analysis Domain" {
     It "Should check registry entries and output results array" {
-        # CheckRegistry helper function testing
         $testKey = "HKCU:\Software\ApexAnalysisTest"
         if (Test-Path $testKey) {
             Remove-Item -Path $testKey -Recurse -Force -ErrorAction SilentlyContinue | Out-Null

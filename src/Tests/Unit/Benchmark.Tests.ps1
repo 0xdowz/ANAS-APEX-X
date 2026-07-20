@@ -1,7 +1,7 @@
-using module "..\..\..\src\Core\EventBus.psm1"
-using module "..\..\..\src\Core\CommandBus.psm1"
-using module "..\..\..\src\Logger\Logger.psm1"
-using module "..\..\..\src\Domain\Benchmark\BenchmarkDomain.psm1"
+using module "..\..\Core\EventBus.psm1"
+using module "..\..\Core\CommandBus.psm1"
+using module "..\..\Logger\Logger.psm1"
+using module "..\..\Domain\Benchmark\BenchmarkDomain.psm1"
 
 # Environment-dependent test: Pinging external resolvers & raw disk I/O throughput
 Describe "System Performance Benchmark Domain" -Tag "Integration", "Environment" {

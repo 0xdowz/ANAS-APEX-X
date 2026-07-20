@@ -4,7 +4,6 @@ using module "..\..\Logger\Logger.psm1"
 
 Describe "Multi-Channel Logger System" {
     BeforeEach {
-        # Initialize logs folder inside ephemeral TestDrive
         [FileLogger]::Initialize($TestDrive)
         [JSONLogger]::Initialize($TestDrive)
     }

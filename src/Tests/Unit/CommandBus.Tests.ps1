@@ -1,5 +1,5 @@
-using module "..\..\..\src\Core\EventBus.psm1"
-using module "..\..\..\src\Core\CommandBus.psm1"
+using module "..\..\Core\EventBus.psm1"
+using module "..\..\Core\CommandBus.psm1"
 
 Describe "CommandBus CLI Parsing and Routing" {
     BeforeEach {

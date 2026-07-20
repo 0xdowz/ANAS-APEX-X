@@ -1,4 +1,4 @@
-using module "..\..\..\src\Core\CacheEngine.psm1"
+using module "..\..\Core\CacheEngine.psm1"
 
 Describe "CacheEngine Temp Storage" {
     BeforeEach {

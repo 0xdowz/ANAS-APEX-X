@@ -1,11 +1,10 @@
-using module "..\..\..\src\Core\EventBus.psm1"
-using module "..\..\..\src\Core\CommandBus.psm1"
-using module "..\..\..\src\Logger\Logger.psm1"
-using module "..\..\..\src\Domain\Cleanup\CleanupDomain.psm1"
+using module "..\..\Core\EventBus.psm1"
+using module "..\..\Core\CommandBus.psm1"
+using module "..\..\Logger\Logger.psm1"
+using module "..\..\Domain\Cleanup\CleanupDomain.psm1"
 
 Describe "System Temp & Junk Cleanup Domain" {
     It "Should scan and delete temporary files in target directory" {
-        # Use TestDrive for hermetic filesystem isolation
         $testDir = Join-Path $TestDrive "test_cleanup"
         if (-not (Test-Path $testDir)) {
             New-Item -ItemType Directory -Path $testDir -Force | Out-Null
