@@ -1,0 +1,24 @@
+# Task Checklist: Phase 3 - Complete Suite (Analyze, Benchmark, Clean, Repair)
+
+- `[x]` Step 1: Analysis Domain Implementation
+  - `[x]` Create `src/Domain/Analysis/AnalysisDomain.psm1`
+  - `[x]` Define `src/Domain/Analysis/Module.json` manifest
+  - `[x]` Implement registry-based rule state lookup and compliance status table
+- `[x]` Step 2: Benchmark Domain Implementation
+  - `[x]` Create `src/Domain/Benchmark/BenchmarkDomain.psm1`
+  - `[x]` Define `src/Domain/Benchmark/Module.json` manifest
+  - `[x]` Implement network latency test (pinging Cloudflare/Google DNS)
+  - `[x]` Implement temporary disk read/write throughput speed test
+- `[x]` Step 3: Cleanup Domain Implementation
+  - `[x]` Create `src/Domain/Cleanup/CleanupDomain.psm1`
+  - `[x]` Define `src/Domain/Cleanup/Module.json` manifest
+  - `[x]` Implement temp files, log logs, crash dump, and prefetch safe cleanup
+- `[x]` Step 4: Repair Domain Implementation
+  - `[x]` Create `src/Domain/Repair/RepairDomain.psm1`
+  - `[x]` Define `src/Domain/Repair/Module.json` manifest
+  - `[x]` Implement TCP/IP stack reset, DNS flush, and network stack repairs
+- `[x]` Step 5: Registry Integration
+  - `[x]` Link new domains in `Apex.psm1` with `CommandBus` handlers
+- `[x]` Step 6: Test Verification
+  - `[x]` Create unit tests under `src/Tests/Unit/` (`Analysis.Tests.ps1`, `Benchmark.Tests.ps1`, `Cleanup.Tests.ps1`, `Repair.Tests.ps1`)
+  - `[x]` Run Pester tests and ensure all pass successfully

@@ -1,0 +1,13 @@
+{
+  "Name": "Logger",
+  "Version": "1.0.0",
+  "Description": "Advanced multi-channel logger (Console, File, JSON, Performance Logging)",
+  "Author": "ANAS APEX X Team",
+  "Dependencies": [
+    "Core"
+  ],
+  "Compatibility": {
+    "MinPowerShellVersion": "7.0",
+    "MinWindowsBuild": "19041"
+  }
+}

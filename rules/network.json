@@ -1,0 +1,16 @@
+[
+  {
+    "Name": "NetworkThrottling",
+    "Description": "Disable network throttling for multimedia and network-bound streams",
+    "Constraints": [],
+    "Actions": [
+      {
+        "Type": "Registry",
+        "Key": "HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile",
+        "Value": "NetworkThrottlingIndex",
+        "Data": 4294967295,
+        "Kind": "DWord"
+      }
+    ]
+  }
+]

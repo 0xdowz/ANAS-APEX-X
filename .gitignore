@@ -1,0 +1,21 @@
+# ANAS APEX X Git Ignore List
+
+# Database & Log Backup Files
+logs/*.log
+logs/*.json
+logs/backups/*.db
+logs/backups/*.corrupted*
+logs/backups/*.json
+
+# Temporary files & Scratch
+*.tmp
+scratch/
+
+# Pester Cache
+.pester/
+
+# OS / Editor Files
+.ds_store
+Thumbs.db
+.vscode/
+.idea/

@@ -1,0 +1,39 @@
+[
+  {
+    "Name": "GameMode",
+    "Description": "Enable Windows Game Mode for system prioritization",
+    "Constraints": [
+      { "Type": "OSVersion", "MinBuild": 14393 }
+    ],
+    "Actions": [
+      {
+        "Type": "Registry",
+        "Key": "HKCU:\\Software\\Microsoft\\GameBar",
+        "Value": "AllowAutoGameMode",
+        "Data": 1,
+        "Kind": "DWord"
+      }
+    ]
+  },
+  {
+    "Name": "DisableDVR",
+    "Description": "Disable Xbox DVR background recording to save CPU cycles",
+    "Constraints": [],
+    "Actions": [
+      {
+        "Type": "Registry",
+        "Key": "HKCU:\\System\\GameConfigStore",
+        "Value": "GameDVR_Enabled",
+        "Data": 0,
+        "Kind": "DWord"
+      },
+      {
+        "Type": "Registry",
+        "Key": "HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\GameDVR",
+        "Value": "AllowGameDVR",
+        "Data": 0,
+        "Kind": "DWord"
+      }
+    ]
+  }
+]

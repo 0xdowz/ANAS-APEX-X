@@ -1,0 +1,15 @@
+{
+  "FeatureFlags": {
+    "ExperimentalFeatures": false,
+    "TaskPipelineAsynchronous": false,
+    "SQLiteTelemetryStore": false,
+    "DeepCleanRegistry": false,
+    "NetworkOffloadOptimization": true,
+    "DynamicMemoryTrimming": true
+  },
+  "Policies": {
+    "GamingModeEnabled": true,
+    "StrictPrivacyMode": false,
+    "AutomaticRollbackBackup": true
+  }
+}

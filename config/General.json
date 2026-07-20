@@ -1,0 +1,22 @@
+{
+  "Application": {
+    "Name": "ANAS APEX X",
+    "Version": "1.0.0-alpha",
+    "Environment": "Production"
+  },
+  "Profiles": {
+    "ActiveProfile": "Default",
+    "SearchPaths": [
+      "./profiles"
+    ]
+  },
+  "Safety": {
+    "EnforceAdministrator": true,
+    "PreventDefenderDisabling": true,
+    "PreventWindowsUpdateDisabling": true,
+    "CreateSystemRestorePoint": true
+  },
+  "Cache": {
+    "DefaultTTLSeconds": 300
+  }
+}

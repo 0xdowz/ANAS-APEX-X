@@ -1,0 +1,14 @@
+{
+  "Name": "Security",
+  "Version": "1.0.0",
+  "Description": "Administrative & Integrity Guard layer",
+  "Author": "ANAS APEX X Team",
+  "Dependencies": [
+    "Core",
+    "Logger"
+  ],
+  "Compatibility": {
+    "MinPowerShellVersion": "7.0",
+    "MinWindowsBuild": "19041"
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "Name": "NetworkDomain",
+  "Version": "1.0.0",
+  "Dependencies": ["Core", "Logger", "Providers"]
+}

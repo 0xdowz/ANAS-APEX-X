@@ -1,0 +1,11 @@
+{
+  "Name": "Core",
+  "Version": "1.0.0",
+  "Description": "Core Engine Infrastructure (Registry, Command Bus, Event Bus, Cache, Policy, Telemetry)",
+  "Author": "ANAS APEX X Team",
+  "Dependencies": [],
+  "Compatibility": {
+    "MinPowerShellVersion": "7.0",
+    "MinWindowsBuild": "19041"
+  }
+}

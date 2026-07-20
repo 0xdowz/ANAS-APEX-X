@@ -1,0 +1,24 @@
+{
+  "Logging": {
+    "Console": {
+      "Enabled": true,
+      "UseUTF8": true,
+      "MinLevel": "INFO"
+    },
+    "File": {
+      "Enabled": true,
+      "Path": "./logs/apex.log",
+      "MinLevel": "DEBUG",
+      "RetentionDays": 7
+    },
+    "JSON": {
+      "Enabled": true,
+      "Path": "./logs/apex.jsonl",
+      "MinLevel": "DEBUG"
+    },
+    "Performance": {
+      "Enabled": true,
+      "TrackSystemMemory": true
+    }
+  }
+}
