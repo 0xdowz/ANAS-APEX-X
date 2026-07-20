@@ -1,0 +1,48 @@
+name: ANAS APEX X - Automated Pester Testing CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  pester-tests:
+    name: Execute Pester Unit Test Suite
+    runs-on: windows-latest
+
+    steps:
+      # Step 1: Checkout the repository code
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Step 2: Ensure Pester testing framework is installed and loaded
+      - name: Install & Setup Pester
+        shell: powershell
+        run: |
+          Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
+          if (-not (Get-Module -ListAvailable -Name Pester)) {
+              Write-Host "Pester module not found. Installing Pester for CurrentUser..." -ForegroundColor Yellow
+              Install-Module -Name Pester -Force -SkipPublisherCheck -Scope CurrentUser
+          }
+          Import-Module Pester -Force
+
+      # Step 3: Execute all unit tests in src/Tests/Unit/
+      - name: Run Unit Tests
+        shell: powershell
+        run: |
+          Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
+          Write-Host "Running ANAS APEX X Pester test suite..." -ForegroundColor Cyan
+          
+          # Execute unit tests and capture test result object
+          $testResult = Invoke-Pester -Path src/Tests/Unit/ -PassThru
+          
+          # Evaluate test failure threshold
+          if ($null -ne $testResult -and $testResult.FailedCount -gt 0) {
+              Write-Error "CI Check Failed: $($testResult.FailedCount) Pester unit test(s) failed."
+              exit 1
+          }
+          
+          Write-Host "All Pester unit tests completed successfully." -ForegroundColor Green
