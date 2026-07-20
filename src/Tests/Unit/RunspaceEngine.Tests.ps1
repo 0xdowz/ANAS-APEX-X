@@ -11,6 +11,6 @@ Describe "Asynchronous Runspace Engine Execution" {
         }
 
         $result = [RunspaceEngine]::ExecuteAsync($taskSb, "ApexTest")
-        $result | Should Be "RunspaceOutput: ApexTest"
+        $result | Should -Be "RunspaceOutput: ApexTest"
     }
 }

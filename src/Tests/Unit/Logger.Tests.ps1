@@ -13,10 +13,10 @@ Describe "Multi-Channel Logger System" {
         [Logger]::Info($testMsg, "TestModule")
 
         $logPath = [FileLogger]::LogFilePath
-        Test-Path $logPath | Should Be $true
+        Test-Path $logPath | Should -Be $true
 
         $content = Get-Content -Path $logPath -Raw
-        $content | Should Match $testMsg
+        $content | Should -Match $testMsg
     }
 
     It "Should write JSON lines records to structured log file" {
@@ -24,13 +24,13 @@ Describe "Multi-Channel Logger System" {
         [Logger]::Success($testMsg, "TestModule")
 
         $jsonPath = [JSONLogger]::LogFilePath
-        Test-Path $jsonPath | Should Be $true
+        Test-Path $jsonPath | Should -Be $true
 
         $content = Get-Content -Path $jsonPath
         $lastLine = $content[-1]
         $obj = ConvertFrom-Json $lastLine
-        $obj.message | Should Be $testMsg
-        $obj.level | Should Be "SUCCESS"
+        $obj.message | Should -Be $testMsg
+        $obj.level | Should -Be "SUCCESS"
     }
 
     It "Should log timing execution metrics via PerformanceLogger" {
@@ -38,12 +38,12 @@ Describe "Multi-Channel Logger System" {
         [Logger]::Log([LogLevel]::INFO, "Doing heavy work", "DomainTest", 150)
 
         $metrics = [PerformanceLogger]::GetMetrics()
-        $metrics.Count | Should Be 1
-        $metrics[0].DurationMs | Should Be 150
-        $metrics[0].Module | Should Be "DomainTest"
+        $metrics.Count | Should -Be 1
+        $metrics[0].DurationMs | Should -Be 150
+        $metrics[0].Module | Should -Be "DomainTest"
         
         $summary = [PerformanceLogger]::GetSummary()
-        $summary.TotalOperations | Should Be 1
-        $summary.TotalDurationMs | Should Be 150
+        $summary.TotalOperations | Should -Be 1
+        $summary.TotalDurationMs | Should -Be 150
     }
 }

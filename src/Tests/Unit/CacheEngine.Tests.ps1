@@ -12,13 +12,13 @@ Describe "CacheEngine Temp Storage" {
     It "Should cache and retrieve values" {
         [CacheEngine]::Set("myKey", "myValue", [TimeSpan]::FromMinutes(1))
         $val = [CacheEngine]::Get("myKey")
-        $val | Should Be "myValue"
+        $val | Should -Be "myValue"
     }
 
     It "Should return null for missing or expired keys" {
         [CacheEngine]::Set("shortKey", "quickValue", [TimeSpan]::FromMilliseconds(200))
         $val1 = [CacheEngine]::Get("shortKey")
-        $val1 | Should Be "quickValue"
+        $val1 | Should -Be "quickValue"
 
         # Wait for expiration
         Start-Sleep -Milliseconds 300
@@ -36,9 +36,9 @@ Describe "CacheEngine Temp Storage" {
         $res1 = [CacheEngine]::GetOrSet("fetchKey", $fetch, [TimeSpan]::FromMinutes(1))
         $res2 = [CacheEngine]::GetOrSet("fetchKey", $fetch, [TimeSpan]::FromMinutes(1))
 
-        $res1 | Should Be "dynamicValue"
-        $res2 | Should Be "dynamicValue"
-        $script:called | Should Be 1
+        $res1 | Should -Be "dynamicValue"
+        $res2 | Should -Be "dynamicValue"
+        $script:called | Should -Be 1
     }
 
     It "Should evict cached items manually" {

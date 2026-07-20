@@ -19,7 +19,7 @@ Describe "Rule DSL Engine Schema Parsing" {
             actions = @()
         }
         $evalResult = [RuleEngine]::EvaluateConstraints($rule.constraints)
-        $evalResult | Should Be $false
+        $evalResult | Should -Be $false
     }
 
     It "Should parse and apply registry rules" {
@@ -38,8 +38,8 @@ Describe "Rule DSL Engine Schema Parsing" {
                 }
             )
         }
-        $rule.id | Should Be "RuleTestReg"
-        $rule.actions.Count | Should Be 1
+        $rule.id | Should -Be "RuleTestReg"
+        $rule.actions.Count | Should -Be 1
 
         [RuleEngine]::ApplyRule($rule)
     }
@@ -48,7 +48,7 @@ Describe "Rule DSL Engine Schema Parsing" {
         $scriptDir = (Get-Item (Join-Path $PSScriptRoot "../../..")).FullName
         $gamingRuleFile = Join-Path $scriptDir "rules/gaming.json"
 
-        Test-Path $gamingRuleFile | Should Be $true
+        Test-Path $gamingRuleFile | Should -Be $true
 
         [RuleEngine]::ApplyRulesFromFile($gamingRuleFile)
     }

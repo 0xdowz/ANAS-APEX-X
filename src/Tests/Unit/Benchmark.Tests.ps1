@@ -7,14 +7,14 @@ using module "..\..\Domain\Benchmark\BenchmarkDomain.psm1"
 Describe "System Performance Benchmark Domain" -Tag "Integration", "Environment" {
     It "Should measure ping response time to Google/Cloudflare" {
         $ms = [BenchmarkDomain]::MeasurePing("8.8.8.8")
-        $ms | Should Not BeNullOrEmpty
+        $ms | Should -Not -BeNullOrEmpty
     }
 
     It "Should run disk speed measurements successfully" {
         $stats = [BenchmarkDomain]::MeasureDiskSpeed()
-        $stats.ContainsKey("WriteSpeedMBs") | Should Be $true
-        $stats.ContainsKey("ReadSpeedMBs") | Should Be $true
-        $stats.WriteSpeedMBs | Should BeGreaterThan -1
-        $stats.ReadSpeedMBs | Should BeGreaterThan -1
+        $stats.ContainsKey("WriteSpeedMBs") | Should -Be $true
+        $stats.ContainsKey("ReadSpeedMBs") | Should -Be $true
+        $stats.WriteSpeedMBs | Should -BeGreaterThan -1
+        $stats.ReadSpeedMBs | Should -BeGreaterThan -1
     }
 }

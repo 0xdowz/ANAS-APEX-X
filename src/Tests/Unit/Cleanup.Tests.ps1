@@ -17,9 +17,9 @@ Describe "System Temp & Junk Cleanup Domain" {
 
         # Run directory cleanup
         $freed = [CleanupDomain]::CleanDirectory($testDir)
-        $freed | Should Be $initialSize
+        $freed | Should -Be $initialSize
 
         # File should have been deleted
-        Test-Path $dummyFile | Should Be $false
+        Test-Path $dummyFile | Should -Be $false
     }
 }

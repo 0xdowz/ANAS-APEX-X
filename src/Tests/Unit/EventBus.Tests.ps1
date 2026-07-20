@@ -21,8 +21,8 @@ Describe "EventBus Pub/Sub System" {
 
         [EventBus]::Publish("OnTestEvent", @{ Message = "Hello World" })
 
-        $script:eventReceived | Should Be $true
-        $script:eventData.Message | Should Be "Hello World"
+        $script:eventReceived | Should -Be $true
+        $script:eventData.Message | Should -Be "Hello World"
     }
 
     It "Should allow multiple listeners for the same event" {
@@ -31,6 +31,6 @@ Describe "EventBus Pub/Sub System" {
         [EventBus]::RegisterListener("MultiEvent", { $script:count++ })
 
         [EventBus]::Publish("MultiEvent", $null)
-        $script:count | Should Be 2
+        $script:count | Should -Be 2
     }
 }

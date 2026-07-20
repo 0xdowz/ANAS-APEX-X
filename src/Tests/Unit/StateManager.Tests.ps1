@@ -14,9 +14,9 @@ Describe "StateManager Core Transaction and Rollback System (SQLite Engine)" {
         [StateManager]::RecordRegistry("HKCU:\Software\ApexTest", "TestVal", "Original", "String", $true)
         
         $current = [StateManager]::CurrentTransaction
-        $current.Count | Should Be 1
-        $current[0].Path | Should Be "HKCU:\Software\ApexTest"
-        $current[0].OriginalVal | Should Be "Original"
+        $current.Count | Should -Be 1
+        $current[0].Path | Should -Be "HKCU:\Software\ApexTest"
+        $current[0].OriginalVal | Should -Be "Original"
     }
 
     It "Should commit transaction logs to SQLite database" {
@@ -26,15 +26,15 @@ Describe "StateManager Core Transaction and Rollback System (SQLite Engine)" {
         [StateManager]::Commit()
 
         # Transaction in-memory list should be cleared
-        [StateManager]::CurrentTransaction.Count | Should Be 0
+        [StateManager]::CurrentTransaction.Count | Should -Be 0
 
         # SQLite Database file should exist inside TestDrive
-        Test-Path $dbPath | Should Be $true
+        Test-Path $dbPath | Should -Be $true
         
         # Query transaction records from database
         $rows = [SQLiteDatabase]::ExecuteQuery("SELECT * FROM transaction_records WHERE name = 'TestCommit';")
-        $rows.Count | Should BeGreaterThan 0
-        $rows[0].original_val | Should Be "Value"
+        $rows.Count | Should -BeGreaterThan 0
+        $rows[0].original_val | Should -Be "Value"
     }
 
     It "Should automatically migrate legacy JSON transaction logs to SQLite" {
@@ -60,11 +60,11 @@ Describe "StateManager Core Transaction and Rollback System (SQLite Engine)" {
         [StateManager]::Initialize($TestDrive)
 
         # JSON file should be removed after migration
-        Test-Path $legacyJson | Should Be $false
+        Test-Path $legacyJson | Should -Be $false
 
         # Migrated record should exist in SQLite database
         $rows = [SQLiteDatabase]::ExecuteQuery("SELECT * FROM transaction_records WHERE name = 'LegacyKey';")
-        $rows.Count | Should BeGreaterThan 0
-        $rows[0].original_val | Should Be "LegacyValue"
+        $rows.Count | Should -BeGreaterThan 0
+        $rows[0].original_val | Should -Be "LegacyValue"
     }
 }

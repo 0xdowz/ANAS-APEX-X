@@ -20,16 +20,16 @@ Describe "CommandBus CLI Parsing and Routing" {
         $raw = @("optimize", "--verbose", "--dry-run", "--profile", "gaming")
         $payload = [CommandBus]::Parse($raw)
 
-        $payload.Command | Should Be "optimize"
-        $payload.Verbose | Should Be $true
-        $payload.DryRun | Should Be $true
-        $payload.Arguments.profile | Should Be "gaming"
+        $payload.Command | Should -Be "optimize"
+        $payload.Verbose | Should -Be $true
+        $payload.DryRun | Should -Be $true
+        $payload.Arguments.profile | Should -Be "gaming"
     }
 
     It "Should parse flags with no command parameter" {
         $raw = @("--help")
         $payload = [CommandBus]::Parse($raw)
-        $payload.Help | Should Be $true
+        $payload.Help | Should -Be $true
     }
 
     It "Should execute registered command handlers" {
@@ -40,6 +40,6 @@ Describe "CommandBus CLI Parsing and Routing" {
         })
 
         [CommandBus]::Dispatch(@("testcommand"))
-        $script:commandRun | Should Be $true
+        $script:commandRun | Should -Be $true
     }
 }
