@@ -5,8 +5,8 @@ using module "..\..\..\src\Domain\Cleanup\CleanupDomain.psm1"
 
 Describe "System Temp & Junk Cleanup Domain" {
     It "Should scan and delete temporary files in target directory" {
-        $scriptDir = (Get-Item (Join-Path $PSScriptRoot "../../..")).FullName
-        $testDir = Join-Path $scriptDir "logs\backups\test_cleanup"
+        # Use TestDrive for hermetic filesystem isolation
+        $testDir = Join-Path $TestDrive "test_cleanup"
         if (-not (Test-Path $testDir)) {
             New-Item -ItemType Directory -Path $testDir -Force | Out-Null
         }
@@ -22,10 +22,5 @@ Describe "System Temp & Junk Cleanup Domain" {
 
         # File should have been deleted
         Test-Path $dummyFile | Should Be $false
-
-        # Clean up directory
-        if (Test-Path $testDir) {
-            Remove-Item -Path $testDir -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
-        }
     }
 }

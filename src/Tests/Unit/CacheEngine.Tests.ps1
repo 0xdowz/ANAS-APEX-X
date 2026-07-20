@@ -1,15 +1,17 @@
 using module "..\..\..\src\Core\CacheEngine.psm1"
 
 Describe "CacheEngine Temp Storage" {
-    It "Should cache and retrieve values" {
+    BeforeEach {
         [CacheEngine]::Clear()
+    }
+
+    It "Should cache and retrieve values" {
         [CacheEngine]::Set("myKey", "myValue", [TimeSpan]::FromMinutes(1))
         $val = [CacheEngine]::Get("myKey")
         $val | Should Be "myValue"
     }
 
     It "Should return null for missing or expired keys" {
-        [CacheEngine]::Clear()
         [CacheEngine]::Set("shortKey", "quickValue", [TimeSpan]::FromMilliseconds(200))
         $val1 = [CacheEngine]::Get("shortKey")
         $val1 | Should Be "quickValue"
@@ -21,7 +23,6 @@ Describe "CacheEngine Temp Storage" {
     }
 
     It "Should fetch via GetOrSet when cache misses" {
-        [CacheEngine]::Clear()
         $script:called = 0
         $fetch = {
             $script:called++
@@ -37,8 +38,7 @@ Describe "CacheEngine Temp Storage" {
     }
 
     It "Should evict cached items manually" {
-        [CacheEngine]::Clear()
-        [CacheEngine]::Set("evictKey", "value", [TimeSpan]::FromMinutes(1))
+        [CacheEngine]::Set("evictKey", "evictVal", [TimeSpan]::FromMinutes(1))
         [CacheEngine]::Evict("evictKey")
         $val = [CacheEngine]::Get("evictKey")
         $val | Should BeNullOrEmpty

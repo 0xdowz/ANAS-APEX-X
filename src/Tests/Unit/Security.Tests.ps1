@@ -9,13 +9,6 @@ Describe "Security & Environment Integrity Engine" {
         $admin.GetType().Name | Should Be "Boolean"
     }
 
-    # Environment-dependent test: Physical/Virtual WMI TPM hardware querying
-    It "Should retrieve TPM status" -Tag "Integration", "Environment" {
-        $tpm = [SecurityEngine]::GetTPMStatus()
-        $tpm.ContainsKey("Present") | Should Be $true
-        $tpm.ContainsKey("Ready") | Should Be $true
-    }
-
     It "Should detect installed game anti-cheats" {
         $ac = [SecurityEngine]::DetectAntiCheats()
         $ac.ContainsKey("VanguardPresent") | Should Be $true
@@ -25,5 +18,14 @@ Describe "Security & Environment Integrity Engine" {
     It "Should run verification check successfully" {
         $result = [SecurityEngine]::VerifyEnvironment()
         $result.GetType().Name | Should Be "Boolean"
+    }
+}
+
+# Environment-dependent test: Physical/Virtual WMI TPM hardware querying
+Describe "Security Environment Hardware Checks" -Tag "Integration", "Environment" {
+    It "Should retrieve TPM status" {
+        $tpm = [SecurityEngine]::GetTPMStatus()
+        $tpm.ContainsKey("Present") | Should Be $true
+        $tpm.ContainsKey("Ready") | Should Be $true
     }
 }

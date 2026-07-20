@@ -27,7 +27,10 @@ Describe "System Optimization Analysis Domain" {
         # Cleanup
         Remove-Item -Path $testKey -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
     }
+}
 
+# Environment-dependent test: Live host system registry scan across HKLM / HKCU paths
+Describe "System Optimization Live Analysis Scan" -Tag "Integration", "Environment" {
     It "Should execute overall analysis scan successfully" {
         $contextType = [Type]"Context"
         $contextType::Silent = $true

@@ -2,6 +2,10 @@ using module "..\..\..\src\Core\EventBus.psm1"
 using module "..\..\..\src\Core\CommandBus.psm1"
 
 Describe "CommandBus CLI Parsing and Routing" {
+    BeforeEach {
+        [CommandBus]::Handlers.Clear()
+    }
+
     It "Should parse command line parameters correctly" {
         $raw = @("optimize", "--verbose", "--dry-run", "--profile", "gaming")
         $payload = [CommandBus]::Parse($raw)
