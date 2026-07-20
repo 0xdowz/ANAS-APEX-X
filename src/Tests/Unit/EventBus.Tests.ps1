@@ -1,6 +1,14 @@
 using module "..\..\..\src\Core\EventBus.psm1"
 
 Describe "EventBus Pub/Sub System" {
+    BeforeEach {
+        [EventBus]::Listeners.Clear()
+    }
+
+    AfterEach {
+        [EventBus]::Listeners.Clear()
+    }
+
     It "Should trigger registered listeners when publishing events" {
         $script:eventReceived = $false
         $script:eventData = $null

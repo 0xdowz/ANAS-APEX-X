@@ -5,13 +5,12 @@ using module "..\..\..\src\Core\SQLiteDatabase.psm1"
 using module "..\..\..\src\Core\StateManager.psm1"
 
 Describe "StateManager Core Transaction and Rollback System (SQLite Engine)" {
-    $RootPath = (Get-Item (Join-Path $PSScriptRoot "../../..")).FullName
+    BeforeEach {
+        [StateManager]::Initialize($TestDrive)
+        [StateManager]::CurrentTransaction.Clear()
+    }
 
     It "Should initialize and record registry state updates" {
-        [StateManager]::Initialize($RootPath)
-        
-        # Clear transaction before testing
-        [StateManager]::CurrentTransaction.Clear()
         [StateManager]::RecordRegistry("HKCU:\Software\ApexTest", "TestVal", "Original", "String", $true)
         
         $current = [StateManager]::CurrentTransaction
@@ -21,9 +20,6 @@ Describe "StateManager Core Transaction and Rollback System (SQLite Engine)" {
     }
 
     It "Should commit transaction logs to SQLite database" {
-        [StateManager]::Initialize($RootPath)
-        [StateManager]::CurrentTransaction.Clear()
-        
         $dbPath = [StateManager]::BackupPath
 
         [StateManager]::RecordRegistry("HKCU:\Software\ApexTest", "TestCommit", "Value", "String", $true)
@@ -32,7 +28,7 @@ Describe "StateManager Core Transaction and Rollback System (SQLite Engine)" {
         # Transaction in-memory list should be cleared
         [StateManager]::CurrentTransaction.Count | Should Be 0
 
-        # SQLite Database file should exist
+        # SQLite Database file should exist inside TestDrive
         Test-Path $dbPath | Should Be $true
         
         # Query transaction records from database
@@ -42,7 +38,12 @@ Describe "StateManager Core Transaction and Rollback System (SQLite Engine)" {
     }
 
     It "Should automatically migrate legacy JSON transaction logs to SQLite" {
-        $legacyJson = Join-Path $RootPath "logs/backups/transaction_log.json"
+        $legacyJsonDir = Join-Path $TestDrive "logs/backups"
+        if (-not (Test-Path $legacyJsonDir)) {
+            New-Item -ItemType Directory -Path $legacyJsonDir -Force | Out-Null
+        }
+        $legacyJson = Join-Path $legacyJsonDir "transaction_log.json"
+        
         $dummyRecord = @(
             @{
                 Type = "Registry"
@@ -56,9 +57,9 @@ Describe "StateManager Core Transaction and Rollback System (SQLite Engine)" {
         $dummyRecord | ConvertTo-Json -Depth 5 | Out-File -FilePath $legacyJson -Encoding utf8
 
         # Initialize StateManager (triggers migration)
-        [StateManager]::Initialize($RootPath)
+        [StateManager]::Initialize($TestDrive)
 
-        # Legacy JSON file should be removed after migration
+        # JSON file should be removed after migration
         Test-Path $legacyJson | Should Be $false
 
         # Migrated record should exist in SQLite database

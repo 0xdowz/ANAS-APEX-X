@@ -3,11 +3,11 @@ using module "..\..\..\src\Core\CommandBus.psm1"
 using module "..\..\..\src\Logger\Logger.psm1"
 
 Describe "Multi-Channel Logger System" {
-    $RootPath = (Get-Item (Join-Path $PSScriptRoot "../../..")).FullName
-
-    # Initialize logs folder locally for tests
-    [FileLogger]::Initialize($RootPath)
-    [JSONLogger]::Initialize($RootPath)
+    BeforeEach {
+        # Initialize logs folder inside ephemeral TestDrive
+        [FileLogger]::Initialize($TestDrive)
+        [JSONLogger]::Initialize($TestDrive)
+    }
 
     It "Should write text records to log file" {
         $testMsg = "Test plain text message " + [Guid]::NewGuid().ToString()

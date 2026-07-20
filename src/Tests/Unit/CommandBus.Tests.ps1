@@ -3,7 +3,17 @@ using module "..\..\..\src\Core\CommandBus.psm1"
 
 Describe "CommandBus CLI Parsing and Routing" {
     BeforeEach {
+        $script:savedHandlers = [CommandBus]::Handlers.Clone()
         [CommandBus]::Handlers.Clear()
+    }
+
+    AfterEach {
+        [CommandBus]::Handlers.Clear()
+        if ($null -ne $script:savedHandlers) {
+            foreach ($key in $script:savedHandlers.Keys) {
+                [CommandBus]::Handlers[$key] = $script:savedHandlers[$key]
+            }
+        }
     }
 
     It "Should parse command line parameters correctly" {
