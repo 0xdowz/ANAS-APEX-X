@@ -1,23 +1,16 @@
-using module "..\..\..\src\Core\EventBus.psm1"
-using module "..\..\..\src\Core\CommandBus.psm1"
-using module "..\..\..\src\Logger\Logger.psm1"
-using module "..\..\..\src\Core\RunspaceEngine.psm1"
+using module "..\..\Core\EventBus.psm1"
+using module "..\..\Core\CommandBus.psm1"
+using module "..\..\Logger\Logger.psm1"
+using module "..\..\Core\RunspaceEngine.psm1"
 
 Describe "Asynchronous Runspace Engine Execution" {
     It "Should execute task script blocks inside background runspace pool" {
-        $contextType = [Type]"Context"
-        $contextType::Silent = $true
-
-        $task = {
+        $taskSb = {
             param($val)
-            Start-Sleep -Milliseconds 100
-            return "Runspace_$val"
+            return "RunspaceOutput: $val"
         }
 
-        $res = [RunspaceEngine]::ExecuteAsync($task, "TestArg")
-        $res | Should Not BeNullOrEmpty
-        $res[0] | Should Be "Runspace_TestArg"
-
-        $contextType::Silent = $false
+        $result = [RunspaceEngine]::ExecuteTask($taskSb, @("ApexTest"))
+        $result | Should Be "RunspaceOutput: ApexTest"
     }
 }

@@ -1,18 +1,12 @@
-using module "..\..\..\src\Core\EventBus.psm1"
-using module "..\..\..\src\Core\CommandBus.psm1"
-using module "..\..\..\src\Logger\Logger.psm1"
-using module "..\..\..\src\Domain\Repair\RepairDomain.psm1"
+using module "..\..\Core\EventBus.psm1"
+using module "..\..\Core\CommandBus.psm1"
+using module "..\..\Logger\Logger.psm1"
+using module "..\..\Domain\Repair\RepairDomain.psm1"
 
 Describe "System Configuration Repair Domain" {
     It "Should simulate repair commands when dry-run is enabled" {
-        $contextType = [Type]"Context"
-        $contextType::DryRun = $true
-        $contextType::Silent = $true
-
-        # Running in dry-run should execute without error and apply nothing
-        [RepairDomain]::Run()
-
-        $contextType::DryRun = $false
-        $contextType::Silent = $false
+        $result = [RepairDomain]::Run($true)
+        $result.GetType().Name | Should Be "Boolean"
+        $result | Should Be $true
     }
 }

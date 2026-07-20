@@ -5,6 +5,10 @@ Describe "CacheEngine Temp Storage" {
         [CacheEngine]::Clear()
     }
 
+    AfterEach {
+        [CacheEngine]::Clear()
+    }
+
     It "Should cache and retrieve values" {
         [CacheEngine]::Set("myKey", "myValue", [TimeSpan]::FromMinutes(1))
         $val = [CacheEngine]::Get("myKey")

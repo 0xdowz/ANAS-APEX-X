@@ -1,8 +1,8 @@
-using module "..\..\..\src\Core\EventBus.psm1"
-using module "..\..\..\src\Core\CommandBus.psm1"
-using module "..\..\..\src\Logger\Logger.psm1"
-using module "..\..\..\src\Core\SQLiteDatabase.psm1"
-using module "..\..\..\src\Core\StateManager.psm1"
+using module "..\..\Core\EventBus.psm1"
+using module "..\..\Core\CommandBus.psm1"
+using module "..\..\Logger\Logger.psm1"
+using module "..\..\Core\SQLiteDatabase.psm1"
+using module "..\..\Core\StateManager.psm1"
 
 Describe "StateManager Core Transaction and Rollback System (SQLite Engine)" {
     BeforeEach {

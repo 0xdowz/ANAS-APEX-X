@@ -1,7 +1,7 @@
-using module "..\..\..\src\Core\EventBus.psm1"
-using module "..\..\..\src\Core\CommandBus.psm1"
-using module "..\..\..\src\Logger\Logger.psm1"
-using module "..\..\..\src\Security\SecurityEngine.psm1"
+using module "..\..\Core\EventBus.psm1"
+using module "..\..\Core\CommandBus.psm1"
+using module "..\..\Logger\Logger.psm1"
+using module "..\..\Security\SecurityEngine.psm1"
 
 Describe "Security & Environment Integrity Engine" {
     It "Should verify admin privileges checker" {

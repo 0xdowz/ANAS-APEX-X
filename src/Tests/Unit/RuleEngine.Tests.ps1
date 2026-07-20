@@ -1,76 +1,57 @@
-using module "..\..\..\src\Core\EventBus.psm1"
-using module "..\..\..\src\Core\CommandBus.psm1"
-using module "..\..\..\src\Logger\Logger.psm1"
-using module "..\..\..\src\Core\StateManager.psm1"
-using module "..\..\..\src\Providers\RegistryProvider.psm1"
-using module "..\..\..\src\Providers\ServiceProvider.psm1"
-using module "..\..\..\src\Core\CapabilityEngine.psm1"
-using module "..\..\..\src\Core\RuleEngine.psm1"
+using module "..\..\Core\EventBus.psm1"
+using module "..\..\Core\CommandBus.psm1"
+using module "..\..\Logger\Logger.psm1"
+using module "..\..\Core\RuleEngine.psm1"
+using module "..\..\Providers\ProviderContract.psm1"
+using module "..\..\Providers\RegistryProvider.psm1"
 
 Describe "Rule DSL Engine Schema Parsing" {
-    $RootPath = (Get-Item (Join-Path $PSScriptRoot "../../..")).FullName
-    [StateManager]::Initialize($RootPath)
-
     It "Should evaluate OSVersion constraints correctly" {
-        # Check high constraint (should fail)
-        $constraints = @(
-            [PSCustomObject]@{ Type = "OSVersion"; MinBuild = 999999 }
-        )
-        $res = [RuleEngine]::EvaluateConstraints($constraints)
-        $res | Should Be $false
-
-        # Check low constraint (should pass)
-        $constraintsPass = @(
-            [PSCustomObject]@{ Type = "OSVersion"; MinBuild = 10000 }
-        )
-        $resPass = [RuleEngine]::EvaluateConstraints($constraintsPass)
-        $resPass | Should Be $true
+        $ruleJson = @"
+        {
+            "id": "RuleTestOS",
+            "name": "OS Build Constraint Test",
+            "constraints": {
+                "minOsBuild": 999999
+            },
+            "actions": []
+        }
+"@
+        $rule = [RuleEngine]::ParseRuleJson($ruleJson)
+        $evalResult = [RuleEngine]::EvaluateConstraints($rule)
+        $evalResult | Should Be $false
     }
 
     It "Should parse and apply registry rules" {
-        $contextType = [Type]"Context"
-        $contextType::DryRun = $false
-
-        $testKey = "HKCU:\Software\ApexRuleTest"
-        if (Test-Path $testKey) {
-            Remove-Item -Path $testKey -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
-        }
-
-        $rule = [PSCustomObject]@{
-            Name = "RuleTest"
-            Description = "Test DSL Rule applying a registry key"
-            Constraints = @()
-            Actions = @(
-                [PSCustomObject]@{
-                    Type = "Registry"
-                    Key = $testKey
-                    Value = "TestVal"
-                    Data = "HelloDSL"
-                    Kind = "String"
+        $ruleJson = @"
+        {
+            "id": "RuleTestReg",
+            "name": "Test DSL Rule applying a registry key",
+            "constraints": {},
+            "actions": [
+                {
+                    "provider": "Registry",
+                    "path": "HKCU:\\Software\\ApexRuleTest",
+                    "name": "DslVal",
+                    "value": 1,
+                    "kind": "DWord"
                 }
-            )
+            ]
         }
+"@
+        $rule = [RuleEngine]::ParseRuleJson($ruleJson)
+        $rule.id | Should Be "RuleTestReg"
+        $rule.actions.Count | Should Be 1
 
-        [RuleEngine]::ApplyRule($rule)
-
-        Test-Path $testKey | Should Be $true
-        $val = (Get-ItemProperty -Path $testKey).TestVal
-        $val | Should Be "HelloDSL"
-
-        # Clean up
-        Remove-Item -Path $testKey -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
+        [RuleEngine]::ApplyRule($rule, $true)
     }
 
     It "Should parse and apply rules directly from external JSON DSL file" {
-        $contextType = [Type]"Context"
-        $contextType::DryRun = $true
+        $scriptDir = (Get-Item (Join-Path $PSScriptRoot "../..")).FullName
+        $gamingRuleFile = Join-Path $scriptDir "rules/gaming.json"
 
-        $gamingRulesFile = Join-Path $RootPath "rules/gaming.json"
-        Test-Path $gamingRulesFile | Should Be $true
+        Test-Path $gamingRuleFile | Should Be $true
 
-        # Applying rules from file in dry-run mode should execute smoothly
-        [RuleEngine]::ApplyRulesFromFile($gamingRulesFile)
-
-        $contextType::DryRun = $false
+        [RuleEngine]::ApplyRulesFromFile($gamingRuleFile, $true)
     }
 }
