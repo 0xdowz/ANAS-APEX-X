@@ -9,7 +9,8 @@ Describe "Security & Environment Integrity Engine" {
         $admin.GetType().Name | Should Be "Boolean"
     }
 
-    It "Should retrieve TPM status" {
+    # Environment-dependent test: Physical/Virtual WMI TPM hardware querying
+    It "Should retrieve TPM status" -Tag "Integration", "Environment" {
         $tpm = [SecurityEngine]::GetTPMStatus()
         $tpm.ContainsKey("Present") | Should Be $true
         $tpm.ContainsKey("Ready") | Should Be $true

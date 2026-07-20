@@ -10,7 +10,7 @@ on:
 
 jobs:
   pester-tests:
-    name: Execute Pester Unit Test Suite
+    name: Execute Deterministic Pester Unit Test Suite
     runs-on: windows-latest
 
     steps:
@@ -29,15 +29,15 @@ jobs:
           }
           Import-Module Pester -Force
 
-      # Step 3: Execute all unit tests in src/Tests/Unit/
-      - name: Run Unit Tests
+      # Step 3: Execute deterministic unit tests (excluding external network/hardware integration tests)
+      - name: Run Deterministic Unit Tests
         shell: powershell
         run: |
           Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
-          Write-Host "Running ANAS APEX X Pester test suite..." -ForegroundColor Cyan
+          Write-Host "Running ANAS APEX X CI Unit Test suite..." -ForegroundColor Cyan
           
-          # Execute unit tests and capture test result object
-          $testResult = Invoke-Pester -Path src/Tests/Unit/ -PassThru
+          # Execute deterministic tests while excluding hardware & external network integration tests
+          $testResult = Invoke-Pester -Path src/Tests/Unit/ -ExcludeTag "Integration" -PassThru
           
           # Evaluate test failure threshold
           if ($null -ne $testResult -and $testResult.FailedCount -gt 0) {
@@ -45,4 +45,4 @@ jobs:
               exit 1
           }
           
-          Write-Host "All Pester unit tests completed successfully." -ForegroundColor Green
+          Write-Host "All deterministic CI Pester unit tests passed." -ForegroundColor Green
