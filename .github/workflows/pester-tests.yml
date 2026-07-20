@@ -10,7 +10,7 @@ on:
 
 jobs:
   pester-tests:
-    name: Execute Deterministic Pester Unit Test Suite
+    name: Execute Diagnostic Pester Unit Test Suite
     runs-on: windows-latest
 
     steps:
@@ -18,31 +18,49 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # Step 2: Ensure Pester testing framework is installed and loaded
+      # Step 2: Environment Diagnostics
+      - name: Environment Diagnostics
+        shell: powershell
+        run: |
+          Write-Host "================ ENVIRONMENT DIAGNOSTICS ================" -ForegroundColor Cyan
+          Write-Host "1. PowerShell Version Table:" -ForegroundColor Yellow
+          $PSVersionTable | Out-String | Write-Host
+          
+          Write-Host "2. Installed Pester Versions:" -ForegroundColor Yellow
+          Get-Module Pester -ListAvailable | Format-Table Name, Version, Path | Out-String | Write-Host
+          
+          Write-Host "3. Current Working Directory:" -ForegroundColor Yellow
+          (Get-Location).Path | Write-Host
+          
+          Write-Host "4. Currently Loaded Modules:" -ForegroundColor Yellow
+          Get-Module | Format-Table Name, Version | Out-String | Write-Host
+          Write-Host "==========================================================" -ForegroundColor Cyan
+
+      # Step 3: Install & Setup Pester 5
       - name: Install & Setup Pester
         shell: powershell
         run: |
           Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
-          if (-not (Get-Module -ListAvailable -Name Pester)) {
-              Write-Host "Pester module not found. Installing Pester for CurrentUser..." -ForegroundColor Yellow
-              Install-Module -Name Pester -Force -SkipPublisherCheck -Scope CurrentUser
-          }
-          Import-Module Pester -Force
+          Install-Module -Name Pester -Force -SkipPublisherCheck -Scope CurrentUser -MinimumVersion 5.0.0
+          Import-Module Pester -MinimumVersion 5.0.0 -Force
 
-      # Step 3: Execute deterministic unit tests (excluding external network/hardware integration tests)
-      - name: Run Deterministic Unit Tests
+      # Step 4: Run Pester tests with Detailed output
+      - name: Run Unit Tests with Diagnostics
         shell: powershell
         run: |
           Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
-          Write-Host "Running ANAS APEX X CI Unit Test suite..." -ForegroundColor Cyan
+          Write-Host "Executing Pester tests..." -ForegroundColor Cyan
           
-          # Execute deterministic tests while excluding hardware & external network integration tests
+          # Force import of Pester 5
+          Import-Module Pester -MinimumVersion 5.0.0 -Force
+          
+          Write-Host "Pester Version in Session: $((Get-Module Pester).Version)" -ForegroundColor Yellow
+          
           $testResult = Invoke-Pester -Path src/Tests/Unit/ -ExcludeTag "Integration" -PassThru
           
-          # Evaluate test failure threshold
           if ($null -ne $testResult -and $testResult.FailedCount -gt 0) {
               Write-Error "CI Check Failed: $($testResult.FailedCount) Pester unit test(s) failed."
               exit 1
           }
           
-          Write-Host "All deterministic CI Pester unit tests passed." -ForegroundColor Green
+          Write-Host "All Pester unit tests passed." -ForegroundColor Green
